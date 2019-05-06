@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+      @section('title')
+        AdonisJS - Simple Web
+      @endsection
+    </title>
+
+    {{ style('css/bulma.min.css')}}
+
+  </head>
+  <body>
+    @include('component.navbar')
+    <br>
+    <div class="container is-fluid">
+      @!section('content')
+
+    </div>
+
+    {{ script('js/jquery-3.4.1.min.js')}}
+    @!section('extra-script')
+  </body>
+</html>

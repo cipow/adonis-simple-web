@@ -1,0 +1,50 @@
+@layout('layout.master')
+
+@section('title')
+  AdonisJS | Masuk
+@endsection
+
+@section('content')
+  <div class="columns">
+    <div class="column is-6 is-offset-3">
+      <div class="box">
+        <form method="post">
+          {{ csrfField() }}
+          <div class="field">
+            <div class="control">
+              <label class="label">Email</label>
+              <input class="input" type="email" name="email" value="{{ old('email', '') }}" placeholder="Email">
+              {{ elIf('<p class="help">$self</p>', getErrorFor('email'), hasErrorFor('email')) }}
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <label class="label">Password</label>
+              <input class="input" type="password" name="password" value="" placeholder="Password">
+              {{ elIf('<p class="help">$self</p>', getErrorFor('password'), hasErrorFor('password')) }}
+            </div>
+          </div>
+
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-primary" type="submit" name="button">Daftar</button>
+            </div>
+
+            <div class="control">
+              <button id="button-back" class="button is-white" type="button">Kembali</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+@endsection
+
+@section('extra-script')
+  <script type="text/javascript">
+    $('#button-back').on('click', function() {
+      window.location.href = '/'
+    })
+  </script>
+@endsection
