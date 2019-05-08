@@ -1,6 +1,10 @@
 'use strict'
 
 class UserLogin {
+  get validateAll() {
+    return true
+  }
+  
   get rules () {
     return {
       email: 'required|email',
