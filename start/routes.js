@@ -26,6 +26,8 @@ Route.group(() => {
   Route.post('/login', 'User/AuthController.login').validator('UserLogin').as('auth.login.post').middleware(['guest'])
 }).prefix('auth')
 
-Route.get('/profil', () => {
-  return "hai kakak"
-}).middleware(['auth'])
+Route.group(() => {
+  Route.get('/', 'User/ProfilController.getProfil').as('profil.profil')
+  Route.put('/', 'User/ProfilController.updateProfil').validator('UserUpdateProfil').as('profil.edit')
+  Route.put('/password', 'User/ProfilController.passwordProfil').validator('UserUpdatePassword').as('profil.password')
+}).prefix('profil')
