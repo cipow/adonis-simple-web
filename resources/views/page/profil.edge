@@ -14,24 +14,69 @@
           <button class="delete"></button>
           {{flashMessage('success')}}
         </div>
+      @elseif(flashMessage('fail'))
+        <div class="notification is-danger">
+          <button class="delete"></button>
+          {{flashMessage('fail')}}
+        </div>
       @endif
     </div>
   </div>
 
   <div class="columns">
     <div class="column is-4 is-offset-1">
-      <div class="card">
+      <div id="viewAvatar" class="card">
         <div class="card-image">
-          <figure class="image is-4by3">
-            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+          <figure class="image">
+            @if(user.avatar)
+              <img src="/image/avatars/{{user.avatar}}" alt="Placeholder image">
+            @else
+              <img src="/1280x960.png" alt="Placeholder image">
+            @endif
           </figure>
         </div>
 
         <div class="card-content">
           <div class="content">
-            ubah
+            <p class="has-text-right">
+              <button id="btnChangeAvatar" class="button is-info" type="button" name="button">Ganti Foto Profil</button>
+            </p>
           </div>
         </div>
+      </div>
+      <div id="changeAvatar" class="card is-hidden">
+        <div class="card-image">
+          <figure class="image">
+            <img id="tmpAvatar" src="/1280x960.png" alt="Placeholder image">
+          </figure>
+        </div>
+
+        <form id="postAvatar" action="{{ route('profil.avatar') }}" method="post" enctype="multipart/form-data">
+          {{ csrfField() }}
+          <div class="card-content">
+            <div class="content">
+              <div class="file has-name is-fullwidth">
+                <label class="file-label">
+                  <input class="file-input" type="file" name="avatar" accept="image/*" onchange="readURL(this)">
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                      Pilih Gambar
+                    </span>
+                  </span>
+                  <span id="nameAvatar" class="file-name"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <footer class="card-footer">
+            <a id="postChangeAvatar" class="card-footer-item">Ganti</a>
+            <a id="cancelChangeAvatar" class="card-footer-item">Batal</a>
+          </footer>
+        </form>
       </div>
 
     </div>
@@ -195,6 +240,11 @@
       $('#editProfil').toggleClass('is-hidden')
     }
 
+    function toggleHideFieldAvatar() {
+      $('#viewAvatar').toggleClass('is-hidden')
+      $('#changeAvatar').toggleClass('is-hidden')
+    }
+
     @if(hasErrorFor('name') || hasErrorFor('email'))
       toggleHideFieldProfil()
     @endif
@@ -211,6 +261,20 @@
       $('#profilEmail').val('{{user.email}}')
     })
 
+    $('#btnChangeAvatar').click(function() {
+      toggleHideFieldAvatar()
+    })
+
+    $('#cancelChangeAvatar').click(function() {
+      $('#tmpAvatar').attr('src', '/1280x960.png')
+      $('#nameAvatar').text('');
+      toggleHideFieldAvatar()
+    })
+
+    $('#postChangeAvatar').click(function() {
+      $('#postAvatar').submit()
+    })
+
     document.addEventListener('DOMContentLoaded', () => {
       (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
         $notification = $delete.parentNode;
@@ -219,6 +283,20 @@
         });
       });
     });
+
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        var name = input.files[0].name;
+
+        reader.onload = function (e) {
+          $('#tmpAvatar').attr('src', e.target.result);
+          $('#nameAvatar').text(name);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
 
   </script>
 @endsection
