@@ -7,7 +7,7 @@
     --}}
 
     <a href="/" class="navbar-item">
-      <span class="button is-primary">AdonisJS</span>
+      <span class="button is-info">AdonisJS</span>
     </a>
 
     <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -32,10 +32,16 @@
     <div class="navbar-end">
       <div class="navbar-item">
         @loggedIn
-          <div class="buttons">
-            <a href="/" class="button is-light">
-              {{auth.user.name}}
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <span class="btn btn-light">{{auth.user.name}}</span>
             </a>
+
+            <div class="navbar-dropdown">
+              <a href="/profil" class="navbar-item">Profil</a>
+              <hr class="navbar-divider">
+              <a href="{{ route('auth.logout') }}" class="navbar-item">Keluar</a>
+            </div>
           </div>
         @else
           <div class="buttons">

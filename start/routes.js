@@ -16,10 +16,16 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.on('/').render('page.landing-page')
+Route.on('/').render('page.landing-page').as('landing-page')
+
 Route.group(() => {
-  Route.get('/register', 'User/AuthController.getRegister').as('auth.register.get')
-  Route.post('/register', 'User/AuthController.register').validator('UserRegister').as('auth.register.post')
-  Route.get('/login', 'User/AuthController.getLogin').as('auth.login.get')
-  Route.post('/login', 'User/AuthController.login').validator('UserLogin').as('auth.login.post')
+  Route.get('/logout', 'User/AuthController.logout').as('auth.logout').middleware(['auth'])
+  Route.on('/register').render('page.register').as('auth.register.get').middleware(['guest'])
+  Route.post('/register', 'User/AuthController.register').validator('UserRegister').as('auth.register.post').middleware(['guest'])
+  Route.on('/login').render('page.login').as('auth.login.get').middleware(['guest'])
+  Route.post('/login', 'User/AuthController.login').validator('UserLogin').as('auth.login.post').middleware(['guest'])
 }).prefix('auth')
+
+Route.get('/profil', () => {
+  return "hai kakak"
+}).middleware(['auth'])
