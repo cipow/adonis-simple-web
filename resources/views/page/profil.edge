@@ -1,0 +1,224 @@
+@layout('layout.master')
+
+@section('title')
+  AdonisJS | Profil
+@endsection
+
+@section('content')
+
+
+  <div class="columns">
+    <div class="column is-10 is-offset-1">
+      @if(flashMessage('success'))
+        <div class="notification is-success">
+          <button class="delete"></button>
+          {{flashMessage('success')}}
+        </div>
+      @endif
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-4 is-offset-1">
+      <div class="card">
+        <div class="card-image">
+          <figure class="image is-4by3">
+            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+          </figure>
+        </div>
+
+        <div class="card-content">
+          <div class="content">
+            ubah
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="column is-6">
+      <div class="box">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <h3 class="titel is-3">Profil</h3>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <button id="btnEditProfil" class="button" type="button" name="button">Ubah</button>
+            </div>
+          </div>
+        </div>
+
+        <fieldset id="viewProfil">
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Nama</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input class="input is-static" type="text" name="name" value="{{user.name}}" placeholder="Nama" readonly>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Email</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input class="input is-static" type="text" name="name" value="{{user.email}}" placeholder="Email" readonly>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </fieldset>
+
+        <fieldset id="editProfil" class="is-hidden">
+          <form action="{{ route('profil.edit')}}?_method=PUT" method="post">
+            {{ csrfField() }}
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Nama</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input id="profilName" class="input" type="text" name="name" value="{{old('name', user.name)}}" placeholder="Nama">
+                    {{ elIf('<p class="help">$self</p>', getErrorFor('name'), hasErrorFor('name')) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Email</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input id="profilEmail" class="input" type="email" name="email" value="{{old('email', user.email)}}" placeholder="Email">
+                    {{ elIf('<p class="help">$self</p>', getErrorFor('email'), hasErrorFor('email')) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label"></div>
+              <div class="field-body">
+                <div class="field is-grouped">
+                  <div class="control">
+                    <button class="button is-info" type="submit" name="button">Ubah Profil</button>
+                  </div>
+
+                  <div class="control">
+                    <button id="btnCancelEditProfil" class="button" type="button" name="button">Batalkan</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+        </fieldset>
+      </div>
+
+      <div class="box">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <h3 class="titel is-3">Password</h3>
+            </div>
+          </div>
+        </div>
+
+        <form action="{{ route('profil.password') }}?_method=PUT" method="post">
+          <fieldset>
+            {{ csrfField() }}
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Saat Ini</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="password" name="password" value="" placeholder="Password Saat Ini">
+                    {{ elIf('<p class="help">$self</p>', getErrorFor('password'), hasErrorFor('password')) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Baru</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="password" name="password_new" value="" placeholder="Password Baru">
+                    {{ elIf('<p class="help">$self</p>', getErrorFor('password_new'), hasErrorFor('password_new')) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <button class="button is-info" type="submit" name="button">Ubah Password</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+@endsection
+
+@section('extra-script')
+  <script type="text/javascript">
+    function toggleHideFieldProfil() {
+      $('#viewProfil').toggleClass('is-hidden')
+      $('#editProfil').toggleClass('is-hidden')
+    }
+
+    @if(hasErrorFor('name') || hasErrorFor('email'))
+      toggleHideFieldProfil()
+    @endif
+
+    $('#btnEditProfil').click(function() {
+      toggleHideFieldProfil()
+      $(this).prop('disabled', true)
+    })
+
+    $('#btnCancelEditProfil').click(function() {
+      toggleHideFieldProfil()
+      $('#btnEditProfil').prop('disabled', false)
+      $('#profilName').val('{{user.name}}')
+      $('#profilEmail').val('{{user.email}}')
+    })
+
+    document.addEventListener('DOMContentLoaded', () => {
+      (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+        $notification = $delete.parentNode;
+        $delete.addEventListener('click', () => {
+          $notification.parentNode.removeChild($notification);
+        });
+      });
+    });
+
+  </script>
+@endsection
