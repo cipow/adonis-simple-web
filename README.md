@@ -1,31 +1,42 @@
-# Adonis fullstack application
+# Adonis Simple Web
 
-This is the fullstack boilerplate for AdonisJs, it comes pre-configured with.
+Simple Web with AdonisJS, PostgreSQL, Bulma.io, JQuery.
 
-1. Bodyparser
-2. Session
-3. Authentication
-4. Web security middleware
-5. CORS
-6. Edge template engine
-7. Lucid ORM
-8. Migrations and seeds
+## Requirements
 
-## Setup
+- Node >= 8.0.0
+- NPM >= 3.0.0
+- AdonisJS CLI >= 4.0.0
+- PostgreSQL
 
-Use the adonis command to install the blueprint
+## Installation
 
 ```bash
-adonis new yardstick
+npm install
 ```
 
-or manually clone the repo and then run `npm install`.
+cp `.env.example` to `.env` and configure database
 
+```
+DB_CONNECTION=pg
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_USER=adonis
+DB_PASSWORD=adonis
+DB_DATABASE=adonis
+```
 
-### Migrations
+do this
 
-Run the following command to run startup migrations.
-
-```js
+```bash
+adonis key:generate
 adonis migration:run
 ```
+
+## Run
+
+```bash
+adonis serve --dev
+```
+
+running on `127.0.0.1:3333`
