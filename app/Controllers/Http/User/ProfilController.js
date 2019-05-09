@@ -4,6 +4,7 @@ const Event = use('Event')
 const Hash = use('Hash')
 const Helpers = use('Helpers')
 const uuidv1 = require('uuid/v1')
+const User = use('App/Models/User')
 
 class ProfilController {
 
@@ -13,16 +14,13 @@ class ProfilController {
   }
 
   async updateProfil(ctx) {
-    const user = await ctx.auth.getUser()
-    user.merge(ctx.request.only(['name', 'email']))
-    await user.save()
+    await User.query().where('id', ctx.auth.user.id).update(ctx.request.only(['name', 'email']))
     ctx.session.flash({ success: 'Berhasil Update Profil' })
     ctx.response.route('profil.profil')
   }
 
   async passwordProfil(ctx) {
-    const user = await ctx.auth.getUser()
-    const verif = await Hash.verify(ctx.request.input('password'), user.password)
+    const verif = await Hash.verify(ctx.request.input('password'), ctx.auth.user.password)
 
     if (!verif) {
       ctx.session.withErrors([{ field: 'password', message: 'password tidak valid' }])
@@ -30,8 +28,7 @@ class ProfilController {
     }
     else {
       const newPassword = await Hash.make(ctx.request.input('password_new'))
-      user.merge({ password: newPassword })
-      await user.save()
+      await User.query().where('id', ctx.auth.user.id).update({ password: newPassword })
       ctx.session.flash({ success: 'Berhasil Update Password' })
       ctx.response.route('profil.profil')
     }
@@ -53,10 +50,9 @@ class ProfilController {
       ctx.response.route('profil.profil')
     }
     else {
-      const user = await ctx.auth.getUser()
-      if (user.avatar) Event.fire('image-delete', `${pathAvatar}/${user.avatar}`)
-      user.merge({ avatar: imageName })
-      await user.save()
+      const avatarBefore = ctx.auth.user.avatar
+      if (avatarBefore) Event.fire('image-delete', `${pathAvatar}/${avatarBefore}`)
+      await User.query().where('id', ctx.auth.user.id).update({ avatar: imageName })
       ctx.session.flash({ success: 'Berhasil Update Foto Profil' })
       ctx.response.route('profil.profil')
     }
