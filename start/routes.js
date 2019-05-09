@@ -28,7 +28,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/', 'User/ProfilController.getProfil').as('profil.profil')
-  Route.post('/', 'User/ProfilController.changeAvatar').as('profil.avatar')
+  Route.post('/', 'User/ProfilController.changeAvatar').validator('UserChangeAvatar').as('profil.avatar')
   Route.put('/', 'User/ProfilController.updateProfil').validator('UserUpdateProfil').as('profil.edit')
   Route.put('/password', 'User/ProfilController.passwordProfil').validator('UserUpdatePassword').as('profil.password')
 }).prefix('profil')
