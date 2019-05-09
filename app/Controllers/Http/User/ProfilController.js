@@ -39,10 +39,11 @@ class ProfilController {
   }
 
   async changeAvatar(ctx) {
+    const pathAvatar = 'image/avatars'
     const imageAvatar = ctx.request.file('avatar')
     const imageName = `${uuidv1()}.${imageAvatar.extname}`
 
-    await imageAvatar.move(Helpers.publicPath('image/avatars'), {
+    await imageAvatar.move(Helpers.publicPath(pathAvatar), {
       name: imageName,
       overwrite: true
     })
@@ -53,7 +54,7 @@ class ProfilController {
     }
     else {
       const user = await ctx.auth.getUser()
-      if (user.avatar) Event.fire('image-delete', user.avatar)
+      if (user.avatar) Event.fire('image-delete', `${pathAvatar}/${user.avatar}`)
       user.merge({ avatar: imageName })
       await user.save()
       ctx.session.flash({ success: 'Berhasil Update Foto Profil' })
