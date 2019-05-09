@@ -1,5 +1,6 @@
 'use strict'
 
+const Event = use('Event')
 const Hash = use('Hash')
 const Helpers = use('Helpers')
 const uuidv1 = require('uuid/v1')
@@ -52,6 +53,7 @@ class ProfilController {
     }
     else {
       const user = await ctx.auth.getUser()
+      if (user.avatar) Event.fire('image-delete', user.avatar)
       user.merge({ avatar: imageName })
       await user.save()
       ctx.session.flash({ success: 'Berhasil Update Foto Profil' })

@@ -69,6 +69,7 @@
                   <span id="nameAvatar" class="file-name"></span>
                 </label>
               </div>
+              {{ elIf('<p class="help">$self</p>', getErrorFor('avatar'), hasErrorFor('avatar')) }}
             </div>
           </div>
 
@@ -247,6 +248,10 @@
 
     @if(hasErrorFor('name') || hasErrorFor('email'))
       toggleHideFieldProfil()
+    @endif
+
+    @if(hasErrorFor('avatar'))
+      toggleHideFieldAvatar()
     @endif
 
     $('#btnEditProfil').click(function() {
