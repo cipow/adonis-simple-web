@@ -1,6 +1,7 @@
 'use strict'
 
 const Event = use('Event')
+const Env = use('Env')
 const Hash = use('Hash')
 const Helpers = use('Helpers')
 const uuidv1 = require('uuid/v1')
@@ -14,7 +15,10 @@ class ProfilController {
   }
 
   async updateProfil(ctx) {
-    await User.query().where('id', ctx.auth.user.id).update(ctx.request.only(['name', 'email']))
+    const email = ctx.request.input('email')
+    const user = await ctx.auth.getUser()
+    if (email != user.email) await User.query().where('id', user.id).update({ is_active: false})
+    await User.query().where('id', user.id).update(ctx.request.only(['name', 'email']))
     ctx.session.flash({ success: 'Berhasil Update Profil' })
     ctx.response.route('profil.profil')
   }
@@ -33,6 +37,18 @@ class ProfilController {
       ctx.response.route('profil.profil')
     }
 
+  }
+
+  resendEmail(ctx) {
+    const user = ctx.auth.user
+    const dataEmail = {
+      url: `${Env.get('APP_URL')}/activation/${user.id}`,
+      name: user.name,
+      email: user.email
+    }
+    Event.fire('email::activation', dataEmail)
+    ctx.session.flash({ success: 'Berhasil Kirim Ulang Email' })
+    ctx.response.route('profil.profil')
   }
 
   async changeAvatar(ctx) {

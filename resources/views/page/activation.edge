@@ -1,0 +1,13 @@
+@layout('layout.master')
+
+@section('title')
+  AdonisJS | Aktivasi Berhasil
+@endsection
+
+@section('content')
+  @if(valid)
+    <h1 class="title is-1">Akun anda sudah Aktif :)</h1>
+  @else
+    <h1 class="title is-1">Token tidak ditemukan :(</h1>
+  @endif
+@endsection

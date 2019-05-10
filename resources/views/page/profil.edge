@@ -20,6 +20,13 @@
           {{flashMessage('fail')}}
         </div>
       @endif
+
+      @if(!user.is_active)
+        <div class="notification is-danger">
+          Akun anda belum aktif :( &nbsp; &nbsp; 
+          <a href="{{route('profil.resendEmail')}}">kirim ulang email aktivasi</a>
+        </div>
+      @endif
     </div>
   </div>
 

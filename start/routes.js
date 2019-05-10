@@ -17,6 +17,13 @@
 const Route = use('Route')
 
 Route.on('/').render('page.landing-page').as('landing-page')
+Route.get('/activation/:token', async ({params, view}) => {
+  const User = use('App/Models/User')
+  const user = await User.findBy('id', params.token)
+  const valid = (user) ? true:false
+  if (valid) await User.query().where('id', params.token).update({is_active: true})
+  return view.render('page.activation', { valid: valid })
+})
 
 Route.group(() => {
   Route.get('/logout', 'User/AuthController.logout').as('auth.logout').middleware(['auth'])
@@ -31,4 +38,5 @@ Route.group(() => {
   Route.post('/', 'User/ProfilController.changeAvatar').validator('UserChangeAvatar').as('profil.avatar')
   Route.put('/', 'User/ProfilController.updateProfil').validator('UserUpdateProfil').as('profil.edit')
   Route.put('/password', 'User/ProfilController.passwordProfil').validator('UserUpdatePassword').as('profil.password')
+  Route.get('/resendEmail', 'User/ProfilController.resendEmail').as('profil.resendEmail')
 }).prefix('profil')
