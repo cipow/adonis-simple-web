@@ -9,7 +9,7 @@ class AuthController {
   async register({ request, response }) {
     const user = await User.create(request.only(['name', 'email', 'password']))
     const dataEmail = {
-      url: `${Env.get('APP_URL')}/activation/${user.id}`,
+      url: `${request.hostname()}:${Env.get('PORT')}/activation/${user.id}`,
       name: user.name,
       email: user.email
     }

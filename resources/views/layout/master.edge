@@ -24,5 +24,15 @@
 
     {{ script('js/jquery-3.4.1.min.js')}}
     @!section('extra-script')
+    <script type="text/javascript">
+      function toggleNavbar() {
+        $('#navbarBurger').toggleClass('is-active')
+        $('#navbarBasicExample').toggleClass('is-active')
+      }
+
+      $('#navbarBurger').click(function() {
+        toggleNavbar()
+      })
+    </script>
   </body>
 </html>

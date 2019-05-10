@@ -42,7 +42,7 @@ class ProfilController {
   resendEmail(ctx) {
     const user = ctx.auth.user
     const dataEmail = {
-      url: `${Env.get('APP_URL')}/activation/${user.id}`,
+      url: `${ctx.request.hostname()}:${Env.get('PORT')}/activation/${user.id}`,
       name: user.name,
       email: user.email
     }
