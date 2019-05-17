@@ -1,0 +1,19 @@
+version: '3.1'
+
+networks:
+  local_net:
+    external:
+      name: local
+
+services:
+  adonis:
+    image: kankuu/adonis:alpha
+    container_name: adonis
+    # restart: always
+    volumes:
+      - ./:/home/adonis/app
+    networks:
+      - local_net
+    ports:
+      - 9900:3333
+    command: "npm start"
