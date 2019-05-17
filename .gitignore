@@ -14,3 +14,7 @@ database/development.sqlite
 # VSCode & Webstorm history directories
 .history
 .idea
+
+# Docker Stack Compose
+adonis-stack.yml
+postgres-stack.yml
